@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+        <div class="main-nav container flex">
+            <!-- Removed company logo -->
+            <div class="nav-links">
+                <ul class="flex">
+                    <li class="hover-link nav-item" id="ipl" onclick="onNavItemClick('ipl')">IPL</li>
+                    <li class="hover-link nav-item" id="finance" onclick="onNavItemClick('finance')">Finance</li>
+                    <li class="hover-link nav-item" id="politics" onclick="onNavItemClick('politics')">Politics</li>
+                    <li class="hover-link nav-item" id="Read ePaper" onclick="onNavItemClick('Read ePaper')">Read ePaper</li>
+                    <li class="hover-link nav-item" id="Movies" onclick="onNavItemClick('movies')">Movies</li>
+                    <li class="hover-link nav-item" id="Fashion" onclick="onNavItemClick('Fashion')">Fashion</li>
+                </ul>
+            </div>
+            <div class="search-bar flex">
+                <input id="search-text" type="text" class="news-input" placeholder="e.g. Science">
+                <button id="search-button" class="search-button">Search</button>
+            </div>
+            <div id="user-info" class="user-info">
+                <!-- Placeholder for user's name -->
+            </div>
+        </div>
+    </nav>
+    
+
+    <main>
+        <div class="cards-container container flex" id="cards-container">
+            
+        </div>
+    </main>
+
+    <template id="template-news-card">
+        <div class="card">
+            <div class="card-header">
+                <img src="https://via.placeholder.com/400x200" alt="news-image" id="news-img">
+            </div>
+            <div class="card-content">
+                <h3 id="news-title">This is the Title</h3>
+                <h6 class="news-source" id="news-source">End Gadget 26/08/2023</h6>
+                <p class="news-desc" id="news-desc">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Recusandae saepe quis voluptatum quisquam vitae doloremque facilis molestias quae ratione cumque!</p>
+            </div>
+        </div>
+    </template>
+
+    <footer>
+        <div class="subscribe-container container flex">
+            <input type="email" id="subscribe-email" class="subscribe-input" placeholder="Enter your email">
+            <button id="subscribe-button" class="subscribe-button">Subscribe</button>
+        </div>
+    </footer>
+
+    <!-- Create an Account Section -->
+    <section class="auth-section container flex">
+        <form id="signup-form" class="auth-form">
+            <h2>Create an Account</h2>
+            <input type="text" id="signup-name" class="auth-input" placeholder="Name" required>
+            <input type="email" id="signup-email" class="auth-input" placeholder="Email" required>
+            <input type="password" id="signup-password" class="auth-input" placeholder="Password" required>
+            <button type="submit" class="auth-button">Create Account</button>
+        </form>
+    </section>
+
+    <!-- Login Section -->
+    <section class="auth-section container flex">
+        <form id="login-form" class="auth-form">
+            <h2>Login</h2>
+            <input type="email" id="login-email" class="auth-input" placeholder="Email" required>
+            <input type="password" id="login-password" class="auth-input" placeholder="Password" required>
+            <button type="submit" class="auth-button">Login</button>
+        </form>
+    </section>
+
+    <script src="script.js"></script>
+    <script>
+        const loginForm = document.querySelector("#login-form");
+        const signupForm = document.querySelector("#signup-form");
+
+        // To store user data temporarily
+        const users = {};
+
+        signupForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const signupName = document.querySelector("#signup-name").value;
+            const signupEmail = document.querySelector("#signup-email").value;
+            const signupPassword = document.querySelector("#signup-password").value;
+            
+            if (!signupName || !signupEmail || !signupPassword) {
+                alert("Please fill in all fields.");
+                return;
+            }
+            
+            try {
+                // Store user data in the users object
+                const user = {
+                    name: signupName,
+                    email: signupEmail,
+                    password: signupPassword
+                };
+
+                users[signupEmail] = user;
+                
+                console.log("User created:", user);
+                alert("Account created successfully!");
+                
+                // Clear form fields
+                signupForm.reset();
+                
+                // Automatically login after signup
+                simulateLogin(user);
+                
+            } catch (error) {
+                console.error("Error creating account:", error.message);
+                alert("Failed to create account. Please try again.");
+            }
+        });
+        
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const loginEmail = document.querySelector("#login-email").value;
+            const loginPassword = document.querySelector("#login-password").value;
+            
+            if (!loginEmail || !loginPassword) {
+                alert("Please fill in all fields.");
+                return;
+            }
+            
+            try {
+                // Fetch user from the users object
+                const user = users[loginEmail];
+                
+                if (user && user.password === loginPassword) {
+                    console.log("User logged in:", user);
+                    alert("Login successful!");
+                    
+                    // Clear form fields
+                    loginForm.reset();
+                    
+                    // Display user name in navigation bar
+                    displayUserName(user.name);
+                } else {
+                    alert("Invalid email or password.");
+                }
+                
+            } catch (error) {
+                console.error("Error logging in:", error.message);
+                alert("Failed to log in. Please check your credentials and try again.");
+            }
+        });
+        
+        function simulateLogin(user) {
+            // Simulate login action
+            console.log("Simulated login:", user);
+            alert("Logged in successfully!");
+            
+            // Display user name in navigation bar
+            displayUserName(user.name);
+        }
+        
+        function displayUserName(name) {
+            const userInfo = document.getElementById("user-info");
+            userInfo.innerHTML = `<span>Welcome, ${name}</span>`;
+        }
+        
+        function reload() {
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
